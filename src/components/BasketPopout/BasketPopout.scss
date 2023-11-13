@@ -1,0 +1,63 @@
+@import "../../globals/globals.scss";
+
+.c-basket__content {
+  position: absolute;
+  top: 56px;
+  right: 20px;
+  z-index: 20;
+  background-color: $color--white;
+  width: 500px;
+  padding: 20px 30px;
+  box-sizing: border-box;
+  border-radius: 12px;
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.15);
+
+  @media (max-width: $breakpoint--tablet) {
+    right: 0;
+    position: fixed;
+    width: 100%;
+  }
+
+  &__title {
+    font-size: 24px;
+    margin-bottom: 14px;
+  }
+
+  &__items {
+    list-style-type: none;
+    max-height: 240px;
+    overflow-y: auto;
+
+    &__item {
+      margin: 16px 0;
+      padding-bottom: 16px;
+      border-bottom: 1px solid $color--grey--light;
+      display: flex;
+      justify-content: space-between;
+
+      &:first-of-type {
+        border-top: 1px solid $color--grey--light;
+        padding-top: 16px;
+        margin-top: 0;
+      }
+      &__quantity {
+        display: flex;
+
+        &__controls {
+          display: flex;
+        }
+      }
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    font-family: $font-text;
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+  }
+}

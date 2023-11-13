@@ -1,0 +1,57 @@
+//Colours
+
+$color--white: #fff;
+$color--black: #131313;
+$color--grey--light: #f3f3f3;
+
+$color--primary: #00b207;
+
+// Fonts
+
+$font-title: "Arial", sans-serif;
+$font-text: "Arial", sans-serif;
+
+// Breakpoints
+
+$breakpoint--mobile: 375px;
+$breakpoint--tablet: 768px;
+$breakpoint--tablet-wide: 1024px;
+$breakpoint--desktop: 1280px;
+$breakpoint--wide: 1440px;
+$breakpoint--huge: 1920px;
+
+// Wrapper
+
+.o-wrapper {
+  margin: 0 auto;
+  max-width: 1400px;
+  width: 100%;
+  padding: 0px 80px;
+  padding-top: 0;
+  box-sizing: border-box;
+
+  @media (max-width: $breakpoint--tablet) {
+    padding: 0 40px;
+  }
+}
+
+.o-btn {
+  display: flex;
+  background-color: $color--primary;
+  border: none;
+  padding: 10px 20px;
+  color: $color--white;
+  font-family: $font-text;
+  font-size: 16px;
+  border-radius: 6px;
+
+  &--circle {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+  }
+}

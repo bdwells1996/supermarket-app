@@ -1,0 +1,15 @@
+.c-product-detail {
+  padding: 20px;
+
+  &__name {
+    font-weight: bold;
+  }
+
+  &__description {
+    margin: 12px 0;
+  }
+
+  &__price {
+    margin-bottom: 12px;
+  }
+}
