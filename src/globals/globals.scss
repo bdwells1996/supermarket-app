@@ -44,6 +44,11 @@ $breakpoint--huge: 1920px;
   font-family: $font-text;
   font-size: 16px;
   border-radius: 6px;
+  transition: opacity 250ms ease;
+
+  &:hover {
+    opacity: 0.7;
+  }
 
   &--circle {
     width: 30px;

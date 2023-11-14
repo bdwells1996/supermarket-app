@@ -26,15 +26,11 @@ export const BasketPopout = ({ onClose }) => {
     }
   }, [basket]);
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
   if (basket.length === 0) {
     return (
       <div className="c-basket__content">
         <h2 className="c-basket__content__title">Basket</h2>
-        <p>Your basket is empty.</p>
+        <p className="c-basket__content__empty">Your basket is empty.</p>
         <button className="c-basket__content__close" onClick={onClose}>
           x
         </button>
@@ -76,7 +72,7 @@ export const BasketPopout = ({ onClose }) => {
           </li>
         ))}
       </ul>
-      <p>Total: ${total.toFixed(2)}</p>
+      <p className="c-basket__content__total">Total: ${total.toFixed(2)}</p>
       <button className="o-btn" onClick={clearBasket}>
         Clear Basket
       </button>

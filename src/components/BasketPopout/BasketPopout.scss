@@ -42,9 +42,17 @@
       }
       &__quantity {
         display: flex;
+        align-items: center;
 
         &__controls {
           display: flex;
+          margin-left: 10px;
+
+          .o-btn {
+            &:first-of-type {
+              margin-right: 8px;
+            }
+          }
         }
       }
     }
@@ -59,5 +67,9 @@
     border: none;
     font-size: 20px;
     cursor: pointer;
+  }
+
+  &__total {
+    margin-bottom: 12px;
   }
 }
