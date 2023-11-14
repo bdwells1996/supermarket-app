@@ -1,7 +1,5 @@
-// BasketContext.tsx
-import React, { ReactNode, createContext, useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-// Define types for product and basket item
 interface Product {
   id: number;
   name: string;
@@ -21,10 +19,12 @@ interface BasketContextProps {
   clearBasket: () => void;
 }
 
-const BasketContext = createContext<BasketContextProps | undefined>(undefined);
+const BasketContext = React.createContext<BasketContextProps | undefined>(
+  undefined
+);
 
 export const useBasket = () => {
-  const context = useContext(BasketContext);
+  const context = React.useContext(BasketContext);
   if (!context) {
     throw new Error("useBasket must be used within a BasketProvider");
   }
@@ -32,69 +32,91 @@ export const useBasket = () => {
 };
 
 interface BasketProviderProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 export const BasketProvider: React.FC<BasketProviderProps> = ({ children }) => {
-  const [basket, setBasket] = useState<BasketItem[]>([]);
+  const [basket, setBasket] = useState<BasketItem[]>(() => {
+    // Initialize basket from local storage or an empty array
+    const storedBasket = localStorage.getItem("basket");
+    return storedBasket ? JSON.parse(storedBasket) : [];
+  });
+
+  useEffect(() => {
+    // Save basket to local storage whenever it changes
+    localStorage.setItem("basket", JSON.stringify(basket));
+  }, [basket]);
 
   const addToBasket = (product: Product) => {
-    const itemIndex = basket.findIndex((item) => item.id === product.id);
+    setBasket((prevBasket) => {
+      const itemIndex = prevBasket.findIndex((item) => item.id === product.id);
 
-    if (itemIndex !== -1) {
-      // Item already in basket, update quantity
-      const updatedBasket = [...basket];
-      updatedBasket[itemIndex].quantity += 1;
-      setBasket(updatedBasket);
-    } else {
-      // Item not in basket, add with quantity 1
-      setBasket([...basket, { ...product, quantity: 1 }]);
-    }
+      if (itemIndex !== -1) {
+        // Item already in basket, update quantity
+        const updatedBasket = [...prevBasket];
+        updatedBasket[itemIndex].quantity += 1;
+        return updatedBasket;
+      } else {
+        // Item not in basket, add with quantity 1
+        return [...prevBasket, { ...product, quantity: 1 }];
+      }
+    });
   };
 
   const removeFromBasket = (productId: number) => {
-    const updatedBasket = basket.filter((item) => item.id !== productId);
-    setBasket(updatedBasket);
+    setBasket((prevBasket) =>
+      prevBasket.filter((item) => item.id !== productId)
+    );
   };
 
   const increaseQuantity = (productId: number) => {
-    const updatedBasket = [...basket];
-    const itemIndex = updatedBasket.findIndex((item) => item.id === productId);
-    if (itemIndex !== -1) {
-      updatedBasket[itemIndex].quantity += 1;
-      setBasket(updatedBasket);
-    }
+    setBasket((prevBasket) => {
+      const updatedBasket = [...prevBasket];
+      const itemIndex = updatedBasket.findIndex(
+        (item) => item.id === productId
+      );
+
+      if (itemIndex !== -1) {
+        updatedBasket[itemIndex].quantity += 1;
+      }
+
+      return updatedBasket;
+    });
   };
 
   const decreaseQuantity = (productId: number) => {
-    const updatedBasket = [...basket];
-    const itemIndex = updatedBasket.findIndex((item) => item.id === productId);
-    if (itemIndex !== -1) {
-      if (updatedBasket[itemIndex].quantity > 1) {
+    setBasket((prevBasket) => {
+      const updatedBasket = [...prevBasket];
+      const itemIndex = updatedBasket.findIndex(
+        (item) => item.id === productId
+      );
+
+      if (itemIndex !== -1 && updatedBasket[itemIndex].quantity > 1) {
         updatedBasket[itemIndex].quantity -= 1;
-        setBasket(updatedBasket);
       } else {
         // Remove the item if the quantity becomes 0
-        removeFromBasket(productId);
+        updatedBasket.splice(itemIndex, 1);
       }
-    }
+
+      return updatedBasket;
+    });
   };
 
   const clearBasket = () => {
     setBasket([]);
   };
 
+  const contextValue: BasketContextProps = {
+    basket,
+    addToBasket,
+    removeFromBasket,
+    increaseQuantity,
+    decreaseQuantity,
+    clearBasket,
+  };
+
   return (
-    <BasketContext.Provider
-      value={{
-        basket,
-        addToBasket,
-        removeFromBasket,
-        increaseQuantity,
-        decreaseQuantity,
-        clearBasket,
-      }}
-    >
+    <BasketContext.Provider value={contextValue}>
       {children}
     </BasketContext.Provider>
   );

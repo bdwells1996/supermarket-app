@@ -8,13 +8,11 @@ import { BasketProvider } from "./context/BasketContext";
 const App: React.FC = () => {
   return (
     <Router>
-      <BasketProvider>
-        <Header />
-        <Routes>
-          <Route path="/" element={<ProductList />} />
-          {/* Add other routes as needed */}
-        </Routes>
-      </BasketProvider>
+      <Header />
+      <Routes>
+        <Route path="/" element={<ProductList />} />
+        {/* Add other routes as needed */}
+      </Routes>
     </Router>
   );
 };
