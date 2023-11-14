@@ -6,7 +6,6 @@ export const BasketPopout = ({ onClose }) => {
   const { basket, increaseQuantity, decreaseQuantity, clearBasket } =
     useBasket();
   const [total, setTotal] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     try {
@@ -19,10 +18,8 @@ export const BasketPopout = ({ onClose }) => {
       };
 
       calculateTotal();
-      setIsLoading(false);
     } catch (error) {
       console.error("Error loading basket:", error);
-      setIsLoading(false);
     }
   }, [basket]);
 
