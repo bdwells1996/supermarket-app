@@ -1,8 +1,12 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useBasket } from "../../context/BasketContext";
 import "./BasketPopout.scss";
 
-export const BasketPopout = ({ onClose }) => {
+interface BasketPopoutProps {
+  onClose: (event: React.MouseEvent) => void;
+}
+
+export const BasketPopout: React.FC<BasketPopoutProps> = ({ onClose }) => {
   const { basket, increaseQuantity, decreaseQuantity, clearBasket } =
     useBasket();
   const [total, setTotal] = useState<number>(0);

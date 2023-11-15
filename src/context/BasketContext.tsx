@@ -10,7 +10,7 @@ interface BasketItem extends Product {
   quantity: number;
 }
 
-interface BasketContextProps {
+export interface BasketContextProps {
   basket: BasketItem[];
   addToBasket: (product: Product) => void;
   removeFromBasket: (productId: number) => void;
@@ -31,7 +31,7 @@ export const useBasket = () => {
   return context;
 };
 
-interface BasketProviderProps {
+export interface BasketProviderProps {
   children: React.ReactNode;
 }
 
