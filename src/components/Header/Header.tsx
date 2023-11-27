@@ -6,6 +6,7 @@ import logoImg from "../../assets/images/logo.svg";
 import { useBasket } from "../../context/BasketContext";
 import { BasketPopout } from "../BasketPopout/BasketPopout";
 
+import React from "react";
 import "./Header.scss";
 
 export const Header = () => {

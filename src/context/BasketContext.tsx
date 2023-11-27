@@ -6,10 +6,12 @@ interface Product {
   price: number;
 }
 
+// Extend Product to include quantity for items in the basket
 interface BasketItem extends Product {
   quantity: number;
 }
 
+// Defines the context that will be provided and the arguments that will be passed
 export interface BasketContextProps {
   basket: BasketItem[];
   addToBasket: (product: Product) => void;
@@ -19,34 +21,40 @@ export interface BasketContextProps {
   clearBasket: () => void;
 }
 
+// Create a context for the basket and initialize it as undefined
 const BasketContext = React.createContext<BasketContextProps | undefined>(
   undefined
 );
 
+// Creates a hook to reuse basket context
 export const useBasket = () => {
   const context = React.useContext(BasketContext);
+  // Throw an error if used outside of a BasketProvider
   if (!context) {
     throw new Error("useBasket must be used within a BasketProvider");
   }
   return context;
 };
 
+// Define the expected props for the BasketProvider component, in this case other react components
 export interface BasketProviderProps {
   children: React.ReactNode;
 }
 
+// BasketProvider component to manage the state of the shopping basket
 export const BasketProvider: React.FC<BasketProviderProps> = ({ children }) => {
+  // State to manage the basket items, initialized from local storage or an empty array
   const [basket, setBasket] = useState<BasketItem[]>(() => {
-    // Initialize basket from local storage or an empty array
     const storedBasket = localStorage.getItem("basket");
     return storedBasket ? JSON.parse(storedBasket) : [];
   });
 
+  // useEffect hook to save the basket to local storage whenever it changes
   useEffect(() => {
-    // Save basket to local storage whenever it changes
     localStorage.setItem("basket", JSON.stringify(basket));
   }, [basket]);
 
+  // Function to add a product to the basket
   const addToBasket = (product: Product) => {
     setBasket((prevBasket) => {
       const itemIndex = prevBasket.findIndex((item) => item.id === product.id);
@@ -63,12 +71,14 @@ export const BasketProvider: React.FC<BasketProviderProps> = ({ children }) => {
     });
   };
 
+  // Function to remove a product from the basket
   const removeFromBasket = (productId: number) => {
     setBasket((prevBasket) =>
       prevBasket.filter((item) => item.id !== productId)
     );
   };
 
+  // Function to increase the quantity of a product in the basket
   const increaseQuantity = (productId: number) => {
     setBasket((prevBasket) => {
       const updatedBasket = [...prevBasket];
@@ -84,6 +94,7 @@ export const BasketProvider: React.FC<BasketProviderProps> = ({ children }) => {
     });
   };
 
+  // Function to decrease the quantity of a product in the basket
   const decreaseQuantity = (productId: number) => {
     setBasket((prevBasket) => {
       const updatedBasket = [...prevBasket];
@@ -102,10 +113,12 @@ export const BasketProvider: React.FC<BasketProviderProps> = ({ children }) => {
     });
   };
 
+  // Function to clear all items from the basket
   const clearBasket = () => {
     setBasket([]);
   };
 
+  // Create the context value with basket state and functions
   const contextValue: BasketContextProps = {
     basket,
     addToBasket,
@@ -115,6 +128,7 @@ export const BasketProvider: React.FC<BasketProviderProps> = ({ children }) => {
     clearBasket,
   };
 
+  // Provide the context value to the children components
   return (
     <BasketContext.Provider value={contextValue}>
       {children}
